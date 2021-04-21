@@ -11,7 +11,7 @@ from config_parser import load_config, app_dict_ip
 HOST = '127.0.0.1'  # The server's hostname or IP address
 PORT = 7150        # The port used by the server
 
-#config_parser_dict = load_config('ex_config.ini')
+
 
 def set_rule(options, src_ip):#przyjmuje liste ustawionych opcji odpowiadajaca aplikacji w slowniku
     
@@ -22,10 +22,9 @@ def set_rule(options, src_ip):#przyjmuje liste ustawionych opcji odpowiadajaca a
     command += f'-l {options["delay"]} ' if 'delay' in options else ''
     command += f'-m {options["loss"]} ' if 'loss' in options else ''
     command += f'-p {options["port"]} ' if 'port' in options else ''   
-    print(command) # TODO: REMOVE
-    proc = subprocess.Popen(['bash','-c', 'source ./h.sh;' + command],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-#   stdout, stderr = proc.communicate()
-#    proc = subprocess.Popen(['bash','-c', command],stdout=subprocess.PIPE, stderr=sys.stderr)
+    print(command) 
+    proc = subprocess.Popen(['bash','-c', 'source ./htb_script.sh;' + command],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
 
 
 def remove_application_rule(interface, ip_addr, rate):
@@ -36,7 +35,7 @@ def remove_application_rule(interface, ip_addr, rate):
 
 def modify_rule(interface, addr, rate):
     get_current_rules = subprocess.run(f'tcshow {interface}', stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
-    #print(get_current_rules.stdout)
+
     current_rules_addresses = []
     rules_dict = json.loads(get_current_rules.stdout)
     if interface in rules_dict:
@@ -48,23 +47,14 @@ def modify_rule(interface, addr, rate):
             else:
                 new_rule = subprocess.run(f'tcset {interface} --rate {rate}Kbps --src-network {addr} --add',stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
 
-#addr_dict = {'youtube':[], 'netflix':[]}
 
-#application_rate = list_of_dict[0][1] #dictionary with rates for an application
-
-#application_dict ={'youtube': 100, 'netflix': 100} #list with applications to limit, but it should be a dictionary 
-#create files to hold identified addresses
-#application_dict = sys.argv[1]
-# def address_file_application(name):
-#     with open('.'.join(name, 'txt'),"a") as f:
-#         return 0
 def setup(name, intercepted):
-    interfaces = ['eth0', 'br-lan']#nazwa pliku config i pliku z przechwyconymi ip
+    #interfaces = ['eth0', 'br-lan']
     config_parser_dict = load_config(name)
     addr_dict = app_dict_ip(config_parser_dict)
     inter_dict = {}#miejsce na nowe adresy wg aktualnego pliku config
-    # inter_before = {}
-    subprocess.Popen(['bash', '-c', 'source ./h.sh; remove_qdiscs; htb_init'])
+    
+    subprocess.Popen(['bash', '-c', 'source ./htb_script.sh; remove_qdiscs; htb_init'])
     
     # usunieto poprzednie tc configi
     if os.path.isfile(intercepted) and os.access(intercepted, os.R_OK):
@@ -95,7 +85,7 @@ def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         
         s.connect((HOST, PORT))
-        config_parser_dict, addr_dict, inter_dict = setup('ex_config.ini','ip_intercepted.json')
+        config_parser_dict, addr_dict, inter_dict = setup('config.ini','ip_intercepted.json')
         try:
             while True: 
                 
@@ -103,11 +93,10 @@ def main():
                 lines = s.recv(1024000)
                 
                 
-                #with open('.'.join((application, 'txt')), "a") as f:
-                #otwieranie pliku przechowujacego wszystkie znane adresy dla danej aplikacji
+                
                 for line in lines.decode().split('\n'):
                     if line != '':
-                        data = json.loads(line)#TWORZY SLOWNIK PYTH Z DANYCH W JSONIE
+                        data = json.loads(line)#TWORZY SLOWNIK Z DANYCH W JSONIE
                         if 'flow' in data:
                             print("interface:\n", data['interface'])
                             print("name:\n", data['flow']['detected_application_name'])
@@ -138,35 +127,7 @@ def main():
                 json.dump(addr_dict, jsonfile)
 
             
-            # with open('ip_intercepted.csv', newline = '') as csvfile:
-            #     ipreader = csv.reader(csvfile, delimiter = ' ', quotechar='|')
-            #     for row in ipreader:
-            #         existing_ip_addresses[row[0]] = row[1:]
-            
-            # with open ('ip_intercepted.csv', 'a', newline = '') as csvfile:
-            #     ipwriter = csv.writer(csvfile, delimiter=' ',
-            #                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            #     for application,address in addr_dict.items():
-        
-            #             if addr not in existing_ip_addresses[application]:
-            #                 ipwriter.writerow([application, ','.join(address)])
-
-
-            
-            #zczytanie obecnych juz danych do tablicy
-            # with open('.'.join((application,'txt')), 'r') as r:
-            #     lines = r.readlines()
-            #     for line in lines:
-            #         existing_ip_addresses.append(line.rstrip('\n'))
-
-            # for application in config_parser_dict:
-            #     with open('.'.join((application, 'txt')), "a") as f:
-                    
-            #         for addr in addr_dict[application]:
-            #                 if addr not in existing_ip_addresses:
-            #                     f.write(addr + '\n')
-                    
-                        #sprawdzac czy taki adres juz istnieje 
+           
                         
 if __name__ == '__main__':
     main()

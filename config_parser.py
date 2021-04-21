@@ -16,6 +16,6 @@ def app_dict_ip(config_parser_dict):
         app_dict[app] = []
     return app_dict
 
-config_parser_dict = load_config('ex_config.ini')
+config_parser_dict = load_config('config.ini')
 apps = app_dict_ip(config_parser_dict)
 print(apps)

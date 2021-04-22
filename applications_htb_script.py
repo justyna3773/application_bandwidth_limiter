@@ -54,7 +54,7 @@ def setup(name, intercepted):
     addr_dict = app_dict_ip(config_parser_dict)
     inter_dict = {}#miejsce na nowe adresy wg aktualnego pliku config
     
-    subprocess.Popen(['bash', '-c', 'source ./htb_script.sh; remove_qdiscs; htb_init'])
+    subprocess.Popen(['bash', '-c', 'source ./htb_script.sh; remove_download; htb_init'])
     
     # usunieto poprzednie tc configi
     if os.path.isfile(intercepted) and os.access(intercepted, os.R_OK):

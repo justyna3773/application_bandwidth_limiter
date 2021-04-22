@@ -11,8 +11,7 @@
 #       mb or m: Megabytes
 #       mbit: Megabits
 #       kbit: Kilobits
-#usunąć wszelkie qdiski można za pomocą "tc qdisc del dev br-lan root"
-#exemplary usage "./htb_skrypt.sh -h 192.168.2.15/32 -d 10mbit"
+
 
 TC=tc
 IP=/usr/libexec/ip
@@ -44,7 +43,7 @@ htb_init ()
 
 
 
-#pass ip, port and download rate as argument
+#pass ip, port, download rate, packet loss, delay as argument
 set_download()
 {
     local OPTIND=1

@@ -2,7 +2,6 @@ import socket
 import json
 import subprocess
 import sys
-import csv
 import os
 import logging
 
@@ -115,7 +114,7 @@ def main():
 
                             print("ip:\n", data['flow']['other_ip'])
         except KeyboardInterrupt:
-            print("why'd you interrupt me")
+            print("Intercepted addresses saved to file ip_intercepted.json")
         finally:
 
             with open('ip_intercepted.json', 'w') as jsonfile:

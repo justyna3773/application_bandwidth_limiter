@@ -92,16 +92,15 @@ set_download()
     
     if [[ ! -z $d_port ]] && [[ ! -z $s_port ]]
     then
-	    echo "both port set" 
         $U32 match ip src $src_ip match ip dst $dst_ip match ip dport $d_port 0xffff match ip sport $s_port 0xffff flowid 1:$q_num 
     elif [[ ! -z $d_port ]]
     then 
-        echo "d_port set"
+
         $U32 match ip src $src_ip match ip dst $dst_ip match ip dport $d_port 0xffff flowid 1:$q_num
     
     elif [[ ! -z $s_port ]]
     then 
-        echo "s_port set"
+
         $U32 match ip src $src_ip match ip dst $dst_ip match ip sport $d_port 0xffff flowid 1:$q_num
     else      
         $U32 match ip src $src_ip match ip dst $dst_ip flowid 1:$q_num      
@@ -165,16 +164,13 @@ set_upload()
     
     if [[ ! -z $d_port ]] && [[ ! -z $s_port ]]
     then
-	    echo "both port set" 
         $U322 match ip src $src_ip match ip dst $dst_ip match ip dport $d_port 0xffff match ip sport $s_port 0xffff flowid 1a1a:$q_num 
     elif [[ ! -z $d_port ]]
     then 
-        echo "d_port set"
         $U322 match ip src $src_ip match ip dst $dst_ip match ip dport $d_port 0xffff flowid 1a1a:$q_num
     
     elif [[ ! -z $s_port ]]
     then 
-        echo "s_port set"
         $U322 match ip src $src_ip match ip dst $dst_ip match ip sport $d_port 0xffff flowid 1a1a:$q_num
         
 

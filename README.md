@@ -21,7 +21,7 @@ sudo pip install tcconfig
 ```
 ## Usage
 You can configure applications' parameters in the config.ini file. Then you can run applications_tcconfig.py to limit configured parameters for connection with chosen applications such as YouTube, Netflix etc. Tcconfig is more reliable, since it has a community of users and has been present for some time.
-You can also run tcconfig on its own to cofigure parameters for an entire interface or a subnet for example. For tcconfig usage refer to: https://tcconfig.readthedocs.io/en/latest/pages/usage/index.html
+You can also run tcconfig on its own to configure parameters for an entire interface or a subnet for example. For tcconfig usage refer to: https://tcconfig.readthedocs.io/en/latest/pages/usage/index.html
 
 You can also use file applications_htb_script.py which uses a simpler implementation of HTB and tc command in Bash to limit configured applications. 
 You can use htb_script.sh functions from command line, but first you have to type:

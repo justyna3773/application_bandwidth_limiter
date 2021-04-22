@@ -26,7 +26,7 @@ set_interface()
 IF=$1
 echo $IF
 }
-remove_qdiscs()
+remove_download()
 {
 #we remove the root qdisc for download at the interface, thus removing all subclasses
 tc qdisc del dev $IF root 
@@ -110,8 +110,7 @@ set_download()
     echo $q_num > q_num.txt
     
 }
-#remove_qdiscs
-#set_download -d 192.168.2.2/32 -r 15mbit 
+
 
 set_upload()
 {
